@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using ToolKitV;
 
 namespace ToolKitV.Views
 {
@@ -7,6 +9,15 @@ namespace ToolKitV.Views
         public Menu()
         {
             InitializeComponent();
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ListView lv && lv.SelectedItem is ListViewItem item)
+            {
+                var tag = item.Tag?.ToString();
+                (Application.Current.MainWindow as MainWindow)?.NavigateTo(tag);
+            }
         }
     }
 }

@@ -16,7 +16,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <Border Grid.Column="0" Background="{StaticResource SidebarBgBrush}" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource LineBrush}">
+                <Border x:Name="InputBorder" Grid.Column="0" Background="{StaticResource SidebarBgBrush}" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource LineBrush}" AllowDrop="True" DragEnter="Border_DragEnter" DragLeave="Border_DragLeave" Drop="Border_Drop">
                     <TextBox Padding="10 0"
                              Height="40"
                              VerticalContentAlignment="Center"
@@ -27,7 +27,8 @@
                              FontSize="13"
                              Text="{Binding Path}"
                              SelectionBrush="{StaticResource PrimaryAccentBrush}"
-                             CaretBrush="{StaticResource PrimaryAccentBrush}"/>
+                             CaretBrush="{StaticResource PrimaryAccentBrush}"
+                             IsReadOnly="False"/>
                 </Border>
 
                 <Button Grid.Column="1"

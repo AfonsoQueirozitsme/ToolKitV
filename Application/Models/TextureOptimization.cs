@@ -6,6 +6,9 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ToolKitV.Models;
 
 namespace ToolkitV.Models
@@ -55,7 +58,7 @@ namespace ToolkitV.Models
             TempFileData tempData = new();
             
             string currentDir = Directory.GetCurrentDirectory();
-            tempData.path = currentDir + "\\temp.dds";
+            tempData.path = currentDir + "\\temp_" + Guid.NewGuid().ToString() + ".dds";
 
             try
             {
@@ -75,7 +78,7 @@ namespace ToolkitV.Models
         {
             Process texConvertation = new();
             texConvertation.StartInfo.FileName = "Dependencies/texconv.exe";
-            texConvertation.StartInfo.Arguments = $"-w {texture.Width} -h {texture.Height} -m {texture.Levels} -f {convertFormat} -bc d temp.dds -y";
+            texConvertation.StartInfo.Arguments = $"-w {texture.Width} -h {texture.Height} -m {texture.Levels} -f {convertFormat} -bc d {tempFileData.path} -y -o {Path.GetDirectoryName(tempFileData.path)}";
             texConvertation.StartInfo.UseShellExecute = false;
             texConvertation.StartInfo.CreateNoWindow = true;
 
@@ -83,14 +86,19 @@ namespace ToolkitV.Models
 
             texConvertation.WaitForExit();
 
-            tempFileData.dds = File.ReadAllBytes(tempFileData.path);
-            Texture tex = DDSIO.GetTexture(tempFileData.dds);
+            if (File.Exists(tempFileData.path))
+            {
+                tempFileData.dds = File.ReadAllBytes(tempFileData.path);
+                Texture tex = DDSIO.GetTexture(tempFileData.dds);
 
-            texture.Data = tex.Data;
-            texture.Depth = tex.Depth;
-            texture.Levels = tex.Levels;
-            texture.Format = tex.Format;
-            texture.Stride = tex.Stride;
+                texture.Data = tex.Data;
+                texture.Depth = tex.Depth;
+                texture.Levels = tex.Levels;
+                texture.Format = tex.Format;
+                texture.Stride = tex.Stride;
+                
+                File.Delete(tempFileData.path);
+            }
 
             return texture;
         }
@@ -182,40 +190,48 @@ namespace ToolkitV.Models
 
         private static float[] GetFileSize(string filePath, LogWriter logWriter)
         {
-            FileStream fs = new(filePath, FileMode.Open);
-            BinaryReader reader = new(fs);
-            byte[] data = new byte[4];
-            int virtualSize;
-            int physicalSize;
-
-            reader.Read(data, 0, 4);
-            char[] magic = System.Text.Encoding.UTF8.GetString(data).ToCharArray();
-
-            string magStr = new(magic);
-
-            if (magStr != "RSC7")
+            try
             {
-                fs.Close();
+                using (FileStream fs = new(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    BinaryReader reader = new(fs);
+                    byte[] data = new byte[4];
+                    int virtualSize;
+                    int physicalSize;
+
+                    if (fs.Length < 16) return new float[] { 0, 0 };
+
+                    reader.Read(data, 0, 4);
+                    char[] magic = System.Text.Encoding.UTF8.GetString(data).ToCharArray();
+
+                    string magStr = new(magic);
+
+                    if (magStr != "RSC7")
+                    {
+                        return new float[] { 0, 0 };
+                    }
+
+                    reader.Read(data, 0, 4);
+                    _ = BitConverter.ToInt16(data);
+
+                    reader.Read(data, 0, 4);
+                    virtualSize = BitConverter.ToInt32(data);
+
+                    reader.Read(data, 0, 4);
+                    physicalSize = BitConverter.ToInt32(data);
+
+                    float vSize = FlagToSize(virtualSize) / 1024 / 1024;
+                    float pSize = FlagToSize(physicalSize) / 1024 / 1024;
+
+                    logWriter?.LogWrite($"File path: {filePath}: Magic - {magStr}, virtualSize - {vSize} MB, physicalSize - {pSize} MB");
+
+                    return new float[] { vSize, pSize };
+                }
+            }
+            catch
+            {
                 return new float[] { 0, 0 };
             }
-
-            reader.Read(data, 0, 4);
-            _ = BitConverter.ToInt16(data);
-
-            reader.Read(data, 0, 4);
-            virtualSize = BitConverter.ToInt32(data);
-
-            reader.Read(data, 0, 4);
-            physicalSize = BitConverter.ToInt32(data);
-
-            float vSize = FlagToSize(virtualSize) / 1024 / 1024;
-            float pSize = FlagToSize(physicalSize) / 1024 / 1024;
-
-            fs.Close();
-
-            logWriter?.LogWrite($"File path: {filePath}: Magic - {magStr}, virtualSize - {vSize} MB, physicalSize - {pSize} MB");
-
-            return new float[] { vSize, pSize };
         }
 
         private static RpfFileEntry CreateFileEntry(string name, string path, ref byte[] data)
@@ -260,111 +276,99 @@ namespace ToolkitV.Models
         public static ResultsData Optimize(string inputDirectory, string backupDirectory, string optimizeSize, bool onlyOverSized, bool downsize, bool formatOptimization, Delegate optimizeProgressHandler)
         {
             ResultsData resultsData = new();
+            object resultsLock = new();
 
             string[] inputFiles = Directory.GetFiles(inputDirectory, "*.ytd", SearchOption.AllDirectories);
             ushort optimizeSizeValue = Convert.ToUInt16(optimizeSize);
             bool doBackup = backupDirectory != "";
 
-            int currentProgress = 0;
+            int filesProcessedCount = 0;
+            LogWriter logWriter = new("Start texture optimizing (Parallel)");
 
-            LogWriter logWriter = new("Start texture optimizing");
-
-            for (int i = 0; i < inputFiles.Length; i++)
+            Parallel.ForEach(inputFiles, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, filePath =>
             {
-                string filePath = inputFiles[i];
                 string fileName = Path.GetFileName(filePath);
-
-                logWriter.LogWrite($"File name: {fileName}, File path: ${filePath}");
-
                 float[] fileSizes = GetFileSize(filePath, logWriter);
 
                 if (onlyOverSized && fileSizes[1] < 16 || (fileSizes[0] == 0.0f && fileSizes[1] == 0.0f))
                 {
                     logWriter.LogWrite($"File name: {fileName}, not oversized, skip");
-                    continue;
                 }
-
-                YtdFile ytdFile;
-
-                try
+                else
                 {
-                    ytdFile = CreateYtdFile(filePath);
-                } catch (Exception ex)
-                {
-                    logWriter.LogWrite($"YtdFile not created: {ex}");
-                    continue;
-                }
-
-                bool ytdChanged = false;
-
-                for (int j = 0; j < ytdFile.TextureDict.Textures.Count; j++)
-                {
-                    Texture texture = ytdFile.TextureDict.Textures[j];
-                    bool isScriptTexture = texture.Name.ToLower().Contains("script_rt");
-
-                    if (isScriptTexture && isScriptTextureCompressed(texture))
+                    YtdFile ytdFile = null;
+                    try
                     {
-                        Texture newTexture = UncompressScriptTexture(texture);
-
-                        resultsData.filesOptimized++;
-
-                        ytdFile.TextureDict.Textures.data_items[j] = newTexture;
-
-                        ytdChanged = true;
+                        ytdFile = CreateYtdFile(filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        logWriter.LogWrite($"YtdFile not created: {ex}");
                     }
 
-                    if (!isScriptTexture && texture.Width + texture.Height >= optimizeSizeValue)
+                    if (ytdFile != null)
                     {
-                        if (!ytdChanged)
+                        bool ytdChanged = false;
+                        int localOptimizedCount = 0;
+
+                        for (int j = 0; j < ytdFile.TextureDict.Textures.Count; j++)
                         {
-                            if (doBackup)
+                            Texture texture = ytdFile.TextureDict.Textures[j];
+                            bool isScriptTexture = texture.Name.ToLower().Contains("script_rt");
+
+                            if (isScriptTexture && isScriptTextureCompressed(texture))
                             {
-                                try
+                                Texture newTexture = UncompressScriptTexture(texture);
+                                localOptimizedCount++;
+                                ytdFile.TextureDict.Textures.data_items[j] = newTexture;
+                                ytdChanged = true;
+                            }
+
+                            if (!isScriptTexture && texture.Width + texture.Height >= optimizeSizeValue)
+                            {
+                                if (!ytdChanged && doBackup)
                                 {
-                                    string relativePath = Path.GetRelativePath(inputDirectory, filePath);
-                                    string[] dirs = relativePath.Split('\\');
-                                    string backupPath = backupDirectory;
-                                    for (int k = 0; k < dirs.Length - 1; k++)
+                                    try
                                     {
-                                        backupPath += "\\" + dirs[k];
-
-                                        if (!Directory.Exists(backupPath))
-                                        {
-                                            Directory.CreateDirectory(backupPath);
-                                        }
+                                        string relativePath = Path.GetRelativePath(inputDirectory, filePath);
+                                        string backupPath = Path.Combine(backupDirectory, relativePath);
+                                        string backupDir = Path.GetDirectoryName(backupPath);
+                                        if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
+                                        File.Copy(filePath, backupPath, true);
                                     }
-
-                                    File.Copy(filePath, backupPath + "\\" + fileName);
+                                    catch { }
                                 }
-                                catch {}
+                                ytdChanged = true;
+
+                                Texture newTexture = OptimizeTexture(texture, formatOptimization, downsize);
+                                localOptimizedCount++;
+                                ytdFile.TextureDict.Textures.data_items[j] = newTexture;
+                            }
                         }
-                            ytdChanged = true;
+
+                        if (ytdChanged)
+                        {
+                            byte[] newData = ytdFile.Save();
+                            File.WriteAllBytes(filePath, newData);
+
+                            float[] newFileSizes = GetFileSize(filePath, logWriter);
+                            lock (resultsLock)
+                            {
+                                resultsData.filesOptimized += localOptimizedCount;
+                                resultsData.optimizedSize += fileSizes[1] - newFileSizes[1];
+                            }
                         }
-
-                        Texture newTexture = OptimizeTexture(texture, formatOptimization, downsize);
-
-                        resultsData.filesOptimized++;
-
-                        ytdFile.TextureDict.Textures.data_items[j] = newTexture;
                     }
                 }
 
-                if (ytdChanged)
-                {
-                    byte[] newData = ytdFile.Save();
-                    File.WriteAllBytes(filePath, newData);
-
-                    float[] newFileSizes = GetFileSize(filePath, logWriter);
-                    resultsData.optimizedSize += fileSizes[1] - newFileSizes[1];
-                }
-
-                int progress = (i * 100 / inputFiles.Length);
-                if (currentProgress != progress)
+                int currentProcessed = System.Threading.Interlocked.Increment(ref filesProcessedCount);
+                int progress = (currentProcessed * 100 / inputFiles.Length);
+                
+                if (currentProcessed % Math.Max(1, inputFiles.Length / 50) == 0 || currentProcessed == inputFiles.Length)
                 {
                     optimizeProgressHandler?.DynamicInvoke(resultsData, progress);
-                    currentProgress = progress;
                 }
-            }
+            });
 
             optimizeProgressHandler?.DynamicInvoke(resultsData, 100);
 
@@ -381,34 +385,36 @@ namespace ToolkitV.Models
                 return results;
             }
 
-            results.filesCount = inputFiles.Length;
+            int filesCount = inputFiles.Length;
+            results.filesCount = filesCount;
 
-            int currentProgress = 0;
+            object statsLock = new();
+            int filesProcessed = 0;
 
-            for (int i = 0; i < inputFiles.Length; i++)
+            Parallel.ForEach(inputFiles, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, filePath =>
             {
-                string filePath = inputFiles[i];
-
                 float[] sizes = GetFileSize(filePath, null);
 
-                results.virtualSize += sizes[0];
-                results.physicalSize += sizes[1];
-
-                if (sizes[1] > 16)
+                lock (statsLock)
                 {
-                    results.oversizedCount++;
+                    results.virtualSize += sizes[0];
+                    results.physicalSize += sizes[1];
+
+                    if (sizes[1] > 16)
+                    {
+                        results.oversizedCount++;
+                    }
                 }
 
-                int progress = (i * 100 / inputFiles.Length);
+                int currentProcessed = System.Threading.Interlocked.Increment(ref filesProcessed);
+                int progress = (currentProcessed * 100 / filesCount);
 
-                if (currentProgress != progress)
+                if (currentProcessed % Math.Max(1, filesCount / 50) == 0 || currentProcessed == filesCount)
                 {
                     updateHandler?.DynamicInvoke(progress);
-                    currentProgress = progress;
                 }
-            }
+            });
 
-            // 100%
             updateHandler?.DynamicInvoke(100);
 
             return results;

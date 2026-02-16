@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using WinForms = System.Windows.Forms;
@@ -45,6 +46,52 @@ namespace ToolKitV.Views
             {
                 Path = FBD.SelectedPath;
             }
+        }
+
+        private void Border_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Copy;
+                InputBorder.BorderBrush = (System.Windows.Media.Brush)FindResource("PrimaryAccentBrush");
+                InputBorder.Background = (System.Windows.Media.Brush)FindResource("GlassHoverBrush");
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            e.Handled = true;
+        }
+
+        private void Border_DragLeave(object sender, DragEventArgs e)
+        {
+            InputBorder.BorderBrush = (System.Windows.Media.Brush)FindResource("LineBrush");
+            InputBorder.Background = (System.Windows.Media.Brush)FindResource("SidebarBgBrush");
+            e.Handled = true;
+        }
+
+        private void Border_Drop(object sender, DragEventArgs e)
+        {
+            InputBorder.BorderBrush = (System.Windows.Media.Brush)FindResource("LineBrush");
+            InputBorder.Background = (System.Windows.Media.Brush)FindResource("SidebarBgBrush");
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length > 0)
+                {
+                    string droppedPath = files[0];
+                    if (Directory.Exists(droppedPath))
+                    {
+                        Path = droppedPath;
+                    }
+                    else if (File.Exists(droppedPath))
+                    {
+                        Path = System.IO.Path.GetDirectoryName(droppedPath);
+                    }
+                }
+            }
+            e.Handled = true;
         }
     }
 }

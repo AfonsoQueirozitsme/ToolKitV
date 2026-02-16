@@ -63,6 +63,37 @@ namespace ToolKitV
             WindowState = WindowState.Minimized;
         }
 
+        public void NavigateTo(string tag)
+        {
+            if (string.IsNullOrEmpty(tag) || OptimizeView == null) return;
+
+            // Reset visibility
+            OptimizeView.Visibility = Visibility.Collapsed;
+            DiagnosticView.Visibility = Visibility.Collapsed;
+            ManifestView.Visibility = Visibility.Collapsed;
+            RenameView.Visibility = Visibility.Collapsed;
+
+            switch (tag)
+            {
+                case "OPTIMIZE":
+                    PageTitle.Text = "OTIMIZADOR DE TEXTURAS";
+                    OptimizeView.Visibility = Visibility.Visible;
+                    break;
+                case "DIAGNOSTIC":
+                    PageTitle.Text = "DIAGNÓSTICO DE PERFORMANCE";
+                    DiagnosticView.Visibility = Visibility.Visible;
+                    break;
+                case "MANIFEST":
+                    PageTitle.Text = "GERADOR DE MANIFESTO";
+                    ManifestView.Visibility = Visibility.Visible;
+                    break;
+                case "RENAME":
+                    PageTitle.Text = "RENOMEAR ASSETS (BULK)";
+                    RenameView.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
