@@ -11,10 +11,10 @@ namespace ToolKitV.Views
     {
         public string MainPath { get; set; } = "";
         public string BackupPath { get; set; } = "";
-        public string OptimizeSizeValue { get; set; } = "8192";
+        public string OptimizeSizeValue { get; set; } = "3072";
         public bool OnlyOverSizedToogled { get; set; } = false;
         public bool DownSizeValue { get; set; } = true;
-        public bool FormatOptimizeValue { get; set; } = false;
+        public bool FormatOptimizeValue { get; set; } = true;
         public TextureOptimization()
         {
             InitializeComponent();
@@ -40,7 +40,7 @@ namespace ToolKitV.Views
         {
             Dispatcher.Invoke(() =>
             {
-                AnalyzeButton.Progress.Width = Math.Ceiling((double)210 / 100 * progress);
+                AnalyzeButton.ProgressValue = progress;
             });
         }
 
@@ -50,7 +50,7 @@ namespace ToolKitV.Views
         {
             Dispatcher.Invoke(() =>
             {
-                OptimizeButton.Progress.Width = Math.Ceiling((double)210 / 100 * progress);
+                OptimizeButton.ProgressValue = progress;
 
                 if (data.filesOptimized > 0)
                 {
@@ -125,7 +125,7 @@ namespace ToolKitV.Views
             OptimizeButton.IsButtonEnabled = true;
             AnalyzeButton.IsButtonEnabled = true;
             AnalyzeButton.Title = "Analyze";
-            AnalyzeButton.Progress.Width = 0;
+            AnalyzeButton.ProgressValue = 0;
         }
 
         private async void OptimizeButton_Click(object sender, RoutedEventArgs e)
@@ -148,7 +148,7 @@ namespace ToolKitV.Views
             OptimizeButton.IsButtonEnabled = true;
             AnalyzeButton.IsButtonEnabled = true;
             OptimizeButton.Title = "Optimize";
-            OptimizeButton.Progress.Width = 0;
+            OptimizeButton.ProgressValue = 0;
 
             StatsData newData = await Task.Run(() => GetStatsData(MainPath, null));
 

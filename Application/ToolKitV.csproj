@@ -27,6 +27,8 @@
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>Assets\Images\logo.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <AssemblyName>FTW_Toolkit</AssemblyName>
+    <RootNamespace>ToolKitV</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Optimize>false</Optimize>
@@ -43,6 +45,7 @@
     <Resource Include="Assets\Images\cross.png" />
     <Resource Include="Assets\Images\discord.png" />
     <Resource Include="Assets\Images\logo_small_grey.png" />
+    <Resource Include="Assets\Images\logo_innercircle.png" />
     <Resource Include="Assets\Images\minus-outlined.png" />
   </ItemGroup>
   <ItemGroup>
@@ -118,7 +121,7 @@
     <Content Include="Assets\Images\logo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <SplashScreen Include="Assets\Images\bg.bmp" />
+    <!-- Removed static splash screen to avoid confusion with dynamic loading view -->
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">

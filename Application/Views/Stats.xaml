@@ -6,186 +6,62 @@
              xmlns:local="clr-namespace:ToolKitV.Views"
              mc:Ignorable="d">
     <Grid>
-        <StackPanel Margin="0 0 0 0" x:Name="StatsBlock">
-            <TextBlock Text="Data:"
-                Foreground="#FFFFFF"
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Style="{StaticResource TT Norms Medium}"
-                FontSize="12px"
-                Typography.Capitals="AllSmallCaps"
-            />
+        <StackPanel x:Name="StatsBlock">
+            <!-- Data Section -->
+            <TextBlock Text="ESTATÍSTICAS" 
+                       Foreground="{StaticResource PrimaryAccentBrush}"
+                       Style="{StaticResource AgencyBold}"
+                       FontSize="16"
+                       Margin="0 0 0 20"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Files Count: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="FilesCount"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Oversized Files: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="OversizedCount"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Files Virtual Size: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="VirtualSize"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Files Physical Size: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="PhysicalSize"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Total de Ficheiros" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="FilesCount" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
 
-            <TextBlock Text="Results:"
-                Foreground="#FFFFFF"
-                VerticalAlignment="Top"
-                HorizontalAlignment="Left"
-                Style="{StaticResource TT Norms Medium}"
-                FontSize="12px"
-                Typography.Capitals="AllSmallCaps"
-                Margin="0 15 0 0"
-            />
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Files Physical Size: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="FilesSizeResult"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Files Optimized: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="OptimizedFiles"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Optimized Size: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="OptimizedSize"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                <TextBlock Text="Optimized Procent: "
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-                <TextBlock x:Name="OptimizedProcent"
-                    Foreground="#FFFFFF"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Left"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="12px"
-                    Typography.Capitals="AllSmallCaps"
-                    Margin="0 5 0 0"
-                />
-            </StackPanel>
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Ficheiros Grandes" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="OversizedCount" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Tam. Virtual" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="VirtualSize" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Tam. Físico" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="PhysicalSize" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Border Height="1" Background="{StaticResource LineBrush}" Margin="0 20"/>
+
+            <!-- Results Section -->
+            <TextBlock Text="RESULTADOS" 
+                       Foreground="{StaticResource PrimaryAccentBrush}"
+                       Style="{StaticResource AgencyBold}"
+                       FontSize="16"
+                       Margin="0 0 0 20"/>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Processado" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="FilesSizeResult" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Otimizados" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="OptimizedFiles" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Recuperado" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="OptimizedSize" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
+
+            <Grid Margin="0 0 0 10">
+                <TextBlock Text="Eficiência" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="12"/>
+                <TextBlock x:Name="OptimizedProcent" HorizontalAlignment="Right" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="12"/>
+            </Grid>
         </StackPanel>
     </Grid>
 </UserControl>

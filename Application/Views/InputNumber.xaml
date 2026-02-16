@@ -8,62 +8,35 @@
              d:DataContext="{Binding Mode=Default, RelativeSource={RelativeSource Self}}">
     <Grid>
         <StackPanel>
-            <Label
-                Margin="0 14 0 0"
-                HorizontalAlignment="Left"
-                Foreground="White"
-                Style="{StaticResource TT Norms Regular}" 
-                FontSize="14" 
-                Content="{Binding Title}"/>
-
-            <StackPanel Margin="0 8 0 0" Orientation="Horizontal">
-                <TextBox
-                    PreviewTextInput="PreviewTextInputHandler"
-                    DataObject.Pasting="TextBoxPasting"
-                    Padding="10 6 0 0"
-                    Width="300"
-                    Height="30" 
-                    HorizontalAlignment="Left"
-                    BorderBrush="#00000000"
-                    FontSize="14"
-                    Text="{Binding Value}"
-                    SelectionBrush="#A0FFFFFF"
-                    CaretBrush="White"
-                    MaxLength="4"
-                    IsEnabled="{Binding IsInputEnabled}"
-                    >
-                    <TextBox.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </TextBox.Resources>
+            <TextBlock Text="{Binding Title}" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="14"/>
+            
+            <Border Margin="0 8 0 0" Background="{StaticResource SidebarBgBrush}" CornerRadius="8" BorderThickness="1" BorderBrush="{StaticResource LineBrush}" Height="40">
+                <TextBox PreviewTextInput="PreviewTextInputHandler"
+                         DataObject.Pasting="TextBoxPasting"
+                         Padding="12 0"
+                         VerticalContentAlignment="Center"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         FontSize="14"
+                         Text="{Binding Value}"
+                         Foreground="{StaticResource MainTextBrush}"
+                         SelectionBrush="{StaticResource PrimaryAccentBrush}"
+                         CaretBrush="{StaticResource PrimaryAccentBrush}"
+                         MaxLength="5"
+                         IsEnabled="{Binding IsInputEnabled}">
                     <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}">
-                            <Setter Property="TextElement.FontFamily"
-                                Value="Assets/Fonts/#TT Norms Regular"/>
-                            <Setter Property="Background" Value="#15FFFFFF" />
-                            <Setter Property="Foreground" Value="#99FFFFFF" />
+                        <Style TargetType="TextBox" BasedOn="{StaticResource AgencyRegular}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsInputEnabled}" Value="True">
-                                    <Setter Property="Background" Value="#15FFFFFF" />
-                                    <Setter Property="Foreground" Value="#99FFFFFF" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding IsInputEnabled}" Value="False">
-                                    <Setter Property="Background" Value="#0DFFFFFF" />
-                                    <Setter Property="Foreground" Value="#30FFFFFF" />
-                                </DataTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Opacity" Value="0.4"/>
+                                </Trigger>
                             </Style.Triggers>
                         </Style>
                     </TextBox.Style>
                 </TextBox>
-            </StackPanel>
+            </Border>
 
-            <Label 
-                HorizontalAlignment="Left"
-                Foreground="#33FFFFFF"
-                Style="{StaticResource TT Norms Regular}"
-                FontSize="14"
-                Content="{Binding Description}"/>
+            <TextBlock Text="{Binding Description}" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="11" Margin="0 4 0 0" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>
 </UserControl>

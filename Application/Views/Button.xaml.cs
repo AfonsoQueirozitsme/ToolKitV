@@ -43,6 +43,26 @@ namespace ToolKitV.Views
             }
         }
 
+        private double _progressValue = 0;
+        public double ProgressValue
+        {
+            get => _progressValue;
+            set
+            {
+                if (value != _progressValue)
+                {
+                    _progressValue = value;
+                    NotifyPropertyChanged();
+                    UpdateProgressWidth();
+                }
+            }
+        }
+
+        private void UpdateProgressWidth()
+        {
+            Progress.Width = (this.ActualWidth > 0 ? this.ActualWidth : 210) * (_progressValue / 100);
+        }
+
         public Button()
         {
             InitializeComponent();

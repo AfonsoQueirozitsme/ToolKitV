@@ -6,122 +6,106 @@
         xmlns:local="clr-namespace:ToolKitV"
         xmlns:uc="clr-namespace:ToolKitV.Views"
         mc:Ignorable="d"
-        Title="ToolKitV" Width="1280" Height="720"
+        Title="FTW Studios | Kit de Ferramentas" Width="1280" Height="720"
+        Icon="pack://application:,,,/Assets/Images/logo_innercircle.png"
         WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
         ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
         FocusVisualStyle="{x:Null}">
 
-    <Window.Background>
-        <ImageBrush ImageSource="../Assets/Images/BG.jpg"></ImageBrush>
-    </Window.Background>
+    <Border CornerRadius="20" Background="{StaticResource MainBgGradient}" BorderBrush="{StaticResource LineBrush}" BorderThickness="1" ClipToBounds="True">
+        <Grid>
+            <!-- Main Application Layout -->
+            <Grid x:Name="MainContentGrid" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22"/>
-            <RowDefinition Height="78"/>
-            <RowDefinition Height="530"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+                <!-- Sidebar -->
+                <Border Grid.Column="0" Background="{StaticResource SidebarBgBrush}" BorderBrush="{StaticResource LineBrush}" BorderThickness="0 0 1 0">
+                    <Grid Margin="20 40">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Logo -->
+                            <RowDefinition Height="Auto"/> <!-- Divider -->
+                            <RowDefinition Height="*"/>    <!-- Menu -->
+                            <RowDefinition Height="Auto"/> <!-- Status/Branding -->
+                            <RowDefinition Height="Auto"/> <!-- Credits -->
+                        </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" MouseDown="StackPanel_MouseDown" Background="Transparent">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Width="120" Grid.Row="0" Margin="15 0 0 0">
-                <TextBlock Text="ToolKitV"
-                        Foreground="#FFFFFF"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Center"
-                        FontSize="10px"
-                        Margin="0, 5, 0, 0"
-                        Typography.Capitals="AllSmallCaps"
-                        Grid.Row="0"
-                        Style="{StaticResource TT Norms Medium}"
-                    />
-            </StackPanel>
+                        <StackPanel Grid.Row="0" Margin="10 0 10 30" MouseDown="StackPanel_MouseDown">
+                            <Grid HorizontalAlignment="Left" Margin="0 0 0 15">
+                                <Border Width="50" Height="50" CornerRadius="12" Background="{StaticResource PrimaryAccentBrush}" Opacity="0.1">
+                                    <Border.Effect>
+                                        <BlurEffect Radius="20"/>
+                                    </Border.Effect>
+                                </Border>
+                                <Image Source="pack://application:,,,/Assets/Images/logo_innercircle.png" Height="45" Width="45" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                            <TextBlock Text="FTW STUDIOS" 
+                                       Foreground="{StaticResource MainTextBrush}" 
+                                       FontSize="20" 
+                                       Style="{StaticResource AgencyBold}"/>
+                            <TextBlock Text="KIT DE FERRAMENTAS" 
+                                       Foreground="{StaticResource PrimaryAccentBrush}" 
+                                       FontSize="11" 
+                                       Opacity="0.8"
+                                       Style="{StaticResource AgencyBold}"/>
+                        </StackPanel>
 
-            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Background="Transparent" Grid.Row="0" Margin="0, -16, 0, 0">
-                <Button
-                    Cursor="Hand"
-                    BorderThickness="0"
-                    Click="MinimizeButton_Click"
-                    >
+                        <Border Grid.Row="1" Height="1" Background="{StaticResource LineBrush}" Margin="0 0 0 30"/>
 
-                    <Image Width="12" Height="12" Source="../Assets/Images/minus-outlined.png"/>
+                        <uc:Menu Grid.Row="2" VerticalAlignment="Top"/>
 
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#14FFFFFF"/>
-                                </Trigger>
-                            </Style.Triggers>
+                        <StackPanel Grid.Row="3" Margin="10 0 10 20">
+                            <TextBlock Text="SISTEMA OPERACIONAL" Foreground="{StaticResource SecondaryTextBrush}" FontSize="10" Style="{StaticResource AgencyBold}"/>
+                            <TextBlock Text="ESTÁVEL" Foreground="{StaticResource PrimaryAccentBrush}" FontSize="14" Style="{StaticResource AgencyBold}"/>
+                        </StackPanel>
 
-                        </Style>
-                    </Button.Style>
+                        <uc:Credits Grid.Row="4" Margin="10 0"/>
+                    </Grid>
+                </Border>
 
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border 
-                                Width="30" 
-                                Height="22"
-                                Background="{TemplateBinding Background}">
+                <!-- Main Content Area -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/> <!-- Header / Title Bar -->
+                        <RowDefinition Height="*"/>  <!-- Content -->
+                    </Grid.RowDefinitions>
 
-                                <ContentPresenter
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                    <!-- Header -->
+                    <Border Grid.Row="0" Background="Transparent" MouseDown="StackPanel_MouseDown">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 15 0">
+                            <Button Width="35" Height="30" Content="—" Click="Minimize_Click" Style="{StaticResource HeaderButtonStyle}"/>
+                            <Button Width="35" Height="30" Content="✕" Click="Close_Click" Style="{StaticResource HeaderButtonStyle}" Margin="5 0 0 0"/>
+                        </StackPanel>
+                    </Border>
 
-                <Button
-                    Cursor="Hand"
-                    BorderThickness="0"
-                    Click="CloseButton_Click"
-                    >
+                    <!-- Content Container -->
+                    <Border Grid.Row="1" Margin="40" Background="{StaticResource CardGradientBrush}" CornerRadius="20" BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+                        <Grid Margin="30">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                    <Image Width="12" Height="12" Source="../Assets/Images/cross.png"/>
+                            <TextBlock Grid.Row="0" Text="OTIMIZADOR DE TEXTURAS" Foreground="{StaticResource MainTextBrush}" FontSize="24" Style="{StaticResource AgencyBold}" Margin="0 0 0 30"/>
 
-                    <Button.Style>
-                        <Style TargetType="{x:Type Button}">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="IndianRed"/>
-                                </Trigger>
-                            </Style.Triggers>
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <uc:TextureOptimization/>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
 
-                        </Style>
-                    </Button.Style>
-
-                    <Button.Template>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border 
-                                Width="30" 
-                                Height="22"
-                                Background="{TemplateBinding Background}">
-
-                                <ContentPresenter
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </StackPanel>
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="220"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <uc:Menu Grid.Column="1" />
-            <uc:TextureOptimization Grid.Column="3" />
+            <!-- Authentication Overlay -->
+            <Grid x:Name="AuthOverlay" Visibility="Visible">
+                <uc:LoginView x:Name="LoginControl" Visibility="Collapsed" LoginSuccess="LoginControl_LoginSuccess"/>
+                <uc:LoadingView x:Name="LoadingControl" Visibility="Visible"/>
+            </Grid>
         </Grid>
-
-        <uc:Credits Margin="30 40 0 0" Grid.Row="3"/>
-    </Grid>
+    </Border>
 </Window>

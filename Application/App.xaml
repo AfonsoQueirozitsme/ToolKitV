@@ -4,17 +4,66 @@
              xmlns:local="clr-namespace:ToolKitV"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
-        <Style x:Key="TT Norms Regular">
-            <Setter Property="TextElement.FontFamily"
-                    Value="Assets/Fonts/#TT Norms Regular"/>
-        </Style>        
-        <Style x:Key="TT Norms Medium">
-            <Setter Property="TextElement.FontFamily"
-                    Value="Assets/Fonts/#TT Norms Medium"/>
+        <!-- Color Palette - High End Dark Mode -->
+        <SolidColorBrush x:Key="PrimaryAccentBrush" Color="#00f8b9"/>
+        <Color x:Key="PrimaryAccentColor">#00f8b9</Color>
+        <SolidColorBrush x:Key="SecondaryTextBrush" Color="#8A939F"/>
+        <SolidColorBrush x:Key="MainTextBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="LineBrush" Color="#1FFFFFFF"/>
+        <SolidColorBrush x:Key="ButtonBgBrush" Color="#1A00f8b9"/>
+        <SolidColorBrush x:Key="InterfaceBgBrush" Color="#0B0D11"/>
+        <SolidColorBrush x:Key="SidebarBgBrush" Color="#11141B"/>
+        <SolidColorBrush x:Key="CardBgBrush" Color="#161A23"/>
+        
+        <LinearGradientBrush x:Key="MainBgGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#0B0D11" Offset="0"/>
+            <GradientStop Color="#11141B" Offset="1"/>
+        </LinearGradientBrush>
+
+        <RadialGradientBrush x:Key="CardGradientBrush" Center="0.5,0.5" GradientOrigin="0.5,0" RadiusX="1" RadiusY="1">
+            <GradientStop Color="#1C212E" Offset="0"/>
+            <GradientStop Color="#161A23" Offset="1"/>
+        </RadialGradientBrush>
+
+        <!-- Glass Effect -->
+        <SolidColorBrush x:Key="GlassBrush" Color="#0DFFFFFF"/>
+        <SolidColorBrush x:Key="GlassHoverBrush" Color="#1AFFFFFF"/>
+
+        <!-- Fonts -->
+        <Style x:Key="AgencyRegular">
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Assets/Fonts/#Agency FB"/>
         </Style>
-        <Style x:Key="TT Norms Bold">
-            <Setter Property="TextElement.FontFamily"
-                    Value="Assets/Fonts/#TT Norms Bold"/>
+        <Style x:Key="AgencyBold">
+            <Setter Property="TextElement.FontFamily" Value="pack://application:,,,/Assets/Fonts/#Agency FB"/>
+            <Setter Property="TextElement.FontWeight" Value="Bold"/>
+        </Style>
+
+        <!-- Compatibility Keys -->
+        <Style x:Key="TT Norms Regular" BasedOn="{StaticResource AgencyRegular}"/>
+        <Style x:Key="TT Norms Medium" BasedOn="{StaticResource AgencyBold}"/>
+        <Style x:Key="TT Norms Bold" BasedOn="{StaticResource AgencyBold}"/>
+        
+        <!-- Global Control Styles -->
+        <!-- Header Button Style -->
+        <Style x:Key="HeaderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource SecondaryTextBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource GlassHoverBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource MainTextBrush}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Application.Resources>
 </Application>

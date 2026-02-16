@@ -6,64 +6,68 @@
              xmlns:local="clr-namespace:ToolKitV.Views"
              mc:Ignorable="d">
     <Grid>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Margin="0 -5 0 0">
-                <local:SelectFolder
-                    x:Name="MainFolder"
-                    Title="Textures Folder"
-                    PropertyChanged="OnMainPathChanged"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
 
-                <StackPanel Margin="0 10 0 0">
-                    <!--<local:ToogleButton
-                        Title ="Backup"/>-->
+        <!-- Configuration Section -->
+        <StackPanel Grid.Column="0" Margin="0 0 40 0">
+            <TextBlock Text="CONFIGURAÇÕES" Foreground="{StaticResource SecondaryTextBrush}" FontSize="12" Style="{StaticResource AgencyBold}" Margin="0 0 0 20"/>
+            
+            <local:SelectFolder
+                x:Name="MainFolder"
+                Title="Pasta de Texturas"
+                PropertyChanged="OnMainPathChanged"/>
 
-                    <local:SelectFolder
-                        x:Name="BackupFolder"
-                        Title="Backup Folder"
-                        PropertyChanged="OnBackupPathChanged"/>
-                </StackPanel>
+            <local:SelectFolder
+                x:Name="BackupFolder"
+                Title="Pasta de Backup"
+                Margin="0 15 0 0"
+                PropertyChanged="OnBackupPathChanged"/>
 
-                <StackPanel Margin="0 10 0 0">
-                    <local:ToogleButton
-                        x:Name="OnlyOverSized"
-                        Title="Only oversized texture dictionaries"
-                        Description="In this case, only ytds that exceed 16 MB will be optimized."
-                        PropertyChanged="OnOnlyOverSizedTexturesChanged"/>
-                </StackPanel>
+            <Border Height="1" Background="{StaticResource LineBrush}" Margin="0 25"/>
 
-                <StackPanel Margin="0 0 0 0">
-                    <local:InputNumber
-                        x:Name="OptimizeSize"
-                        Title="Optimize Size"
-                        Description="Width + Height in px = Optimize size. If nothing is optimized,&#10;try to set less values(4096, 2048, 1024, 512)"
-                        NumberValue="8192"
-                        PropertyChanged="OptimizeSize_PropertyChanged"/>
-                </StackPanel>
+            <UniformGrid Columns="2">
+                <local:ToogleButton
+                    x:Name="OnlyOverSized"
+                    Title="Apenas Ficheiros +16MB"
+                    Description="Otimiza apenas dicionários pesados."
+                    PropertyChanged="OnOnlyOverSizedTexturesChanged"/>
 
-                <StackPanel Margin="0 10 0 0">
-                    <local:ToogleButton
-                        x:Name="Downsize"
-                        Title="Downsize"
-                        Description="If enabled, the size of textures will be reduced by 2 times."
-                        PropertyChanged="Downsize_PropertyChanged"
-                        IsToogled="True"/>
-                </StackPanel>
+                <local:ToogleButton
+                    x:Name="Downsize"
+                    Title="Reduzir Resolução"
+                    Description="Reduz o tamanho em 2x."
+                    PropertyChanged="Downsize_PropertyChanged"
+                    IsToogled="True"/>
 
-                <StackPanel Margin="0 10 0 0">
-                    <local:ToogleButton
-                        x:Name="FormatOptimize"
-                        Title="Format optimization"
-                        Description="Change DDS format to smallest, may affect the display quality of colors."
-                        PropertyChanged="FormatOptimize_PropertyChanged"/>
-                </StackPanel>
+                <local:InputNumber
+                    x:Name="OptimizeSize"
+                    Title="Resolução Máxima"
+                    Description="Largura + Altura combinadas."
+                    NumberValue="3072"
+                    Margin="0 15 15 0"
+                    PropertyChanged="OptimizeSize_PropertyChanged"/>
 
-                <StackPanel Margin="0 35 0 0" Orientation="Horizontal">
-                    <local:Button x:Name="OptimizeButton" Title="Optimize" IsButtonEnabledValue="False" Click="OptimizeButton_Click"/>
-                    <local:Button x:Name="AnalyzeButton" Title="Analyze" IsButtonEnabledValue="False" Click="AnalyzeButton_Click" Margin="30 0 0 0"/>
-                </StackPanel>
+                <local:ToogleButton
+                    x:Name="FormatOptimize"
+                    Title="Otimizar Formatos"
+                    Description="Converte para DDS compactado."
+                    Margin="0 15 0 0"
+                    IsToogled="True"
+                    PropertyChanged="FormatOptimize_PropertyChanged"/>
+            </UniformGrid>
+
+            <StackPanel Margin="0 40 0 0" Orientation="Horizontal">
+                <local:Button x:Name="OptimizeButton" Title="INICIAR OTIMIZAÇÃO" IsButtonEnabledValue="False" Click="OptimizeButton_Click" Width="200"/>
+                <local:Button x:Name="AnalyzeButton" Title="ANALISAR PASTA" IsButtonEnabledValue="False" Click="AnalyzeButton_Click" Margin="20 0 0 0" Width="200"/>
             </StackPanel>
-
-            <local:Stats Margin="190 0 0 0" x:Name="Stats"/>
         </StackPanel>
+
+        <!-- Stats / Results Section -->
+        <Border Grid.Column="1" Background="{StaticResource GlassBrush}" CornerRadius="12" Padding="20">
+            <local:Stats x:Name="Stats"/>
+        </Border>
     </Grid>
 </UserControl>

@@ -8,59 +8,37 @@
              d:DataContext="{Binding Mode=Default, RelativeSource={RelativeSource Self}}">
     <Grid>
         <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label
-                    HorizontalAlignment="Left"
-                    Foreground="White"
-                    Style="{StaticResource TT Norms Regular}"
-                    FontSize="14"
-                    Content="{Binding Title}"/>
-                <ToggleButton Margin="8 0 0 0" Width="20" Height="20" Click="ToggleButton_Click">
-                    <ToggleButton.Resources>
-                        <Style TargetType="{x:Type Border}">
-                            <Setter Property="CornerRadius" Value="6"/>
-                        </Style>
-                    </ToggleButton.Resources>
-                    <ToggleButton.Style>
-                        <Style TargetType="{x:Type ToggleButton}">
-                            <Setter Property="Background" Value="#0DFFFFFF" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ToggleButton">
-                                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
-                                                        Background="{TemplateBinding Background}">
-                                            <ContentPresenter HorizontalAlignment="Center"                  
-                                                      VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ToggleButton.Style>
-
-                    <Rectangle Width="10" Height="10" RadiusX="3" RadiusY="3">
-                        <Rectangle.Style>
-                            <Style TargetType="Rectangle">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsToogled}" Value="True">
-                                        <Setter Property="Fill" Value="#FFFFFF" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsToogled}" Value="False">
-                                        <Setter Property="Fill" Value="Transparent" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Rectangle.Style>
-                    </Rectangle>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Column="0" Text="{Binding Title}" Foreground="{StaticResource MainTextBrush}" Style="{StaticResource AgencyBold}" FontSize="14" VerticalAlignment="Center"/>
+                
+                <ToggleButton Grid.Column="1" IsChecked="{Binding IsToogled}" Click="ToggleButton_Click">
+                    <ToggleButton.Template>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="Switch" Width="44" Height="22" Background="{StaticResource SidebarBgBrush}" CornerRadius="11" BorderThickness="1" BorderBrush="{StaticResource LineBrush}">
+                                <Ellipse x:Name="Dot" Width="16" Height="16" Fill="{StaticResource SecondaryTextBrush}" HorizontalAlignment="Left" Margin="2 0">
+                                    <Ellipse.RenderTransform>
+                                        <TranslateTransform X="0"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Switch" Property="Background" Value="{StaticResource ButtonBgBrush}"/>
+                                    <Setter TargetName="Switch" Property="BorderBrush" Value="{StaticResource PrimaryAccentBrush}"/>
+                                    <Setter TargetName="Dot" Property="Fill" Value="{StaticResource PrimaryAccentBrush}"/>
+                                    <Setter TargetName="Dot" Property="HorizontalAlignment" Value="Right"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </ToggleButton.Template>
                 </ToggleButton>
-            </StackPanel>
-
-            <Label 
-                HorizontalAlignment="Left"
-                Foreground="#33FFFFFF"
-                Style="{StaticResource TT Norms Regular}"
-                FontSize="14"
-                Content="{Binding Description}"/>
+            </Grid>
+            <TextBlock Text="{Binding Description}" Foreground="{StaticResource SecondaryTextBrush}" Style="{StaticResource AgencyRegular}" FontSize="11" Margin="0 4 0 0" TextWrapping="Wrap"/>
         </StackPanel>
     </Grid>
 </UserControl>
