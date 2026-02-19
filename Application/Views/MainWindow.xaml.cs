@@ -70,6 +70,7 @@ namespace ToolKitV
             // Reset visibility
             OptimizeView.Visibility = Visibility.Collapsed;
             DiagnosticView.Visibility = Visibility.Collapsed;
+            MergerView.Visibility = Visibility.Collapsed;
             ManifestView.Visibility = Visibility.Collapsed;
             RenameView.Visibility = Visibility.Collapsed;
 
@@ -82,6 +83,10 @@ namespace ToolKitV
                 case "DIAGNOSTIC":
                     PageTitle.Text = "DIAGNÓSTICO DE PERFORMANCE";
                     DiagnosticView.Visibility = Visibility.Visible;
+                    break;
+                case "MERGER":
+                    PageTitle.Text = "MERGER DE PACKS (VEÍCULOS/MAPAS)";
+                    MergerView.Visibility = Visibility.Visible;
                     break;
                 case "MANIFEST":
                     PageTitle.Text = "GERADOR DE MANIFESTO";

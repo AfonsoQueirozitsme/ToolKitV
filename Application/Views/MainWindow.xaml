@@ -97,6 +97,7 @@
                                 <Grid x:Name="ContentHost">
                                     <uc:TextureOptimization x:Name="OptimizeView" Visibility="Visible"/>
                                     <uc:DiagnosticView x:Name="DiagnosticView" Visibility="Collapsed"/>
+                                    <uc:MergerView x:Name="MergerView" Visibility="Collapsed"/>
                                     <uc:ManifestView x:Name="ManifestView" Visibility="Collapsed"/>
                                     <uc:RenameView x:Name="RenameView" Visibility="Collapsed"/>
                                 </Grid>

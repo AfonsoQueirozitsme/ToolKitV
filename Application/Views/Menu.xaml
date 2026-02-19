@@ -46,7 +46,7 @@
 
             <ListViewItem IsSelected="True" Tag="OPTIMIZE">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="22" Height="22" Source="../Assets/Images/textureIcon.png" Opacity="0.8"/>
+                    <Image Width="22" Height="22" Source="pack://application:,,,/Assets/Images/textureIcon.png" Opacity="0.8"/>
                     <TextBlock Text="OTIMIZADOR" 
                                Foreground="{StaticResource MainTextBrush}" 
                                Style="{StaticResource AgencyBold}" 
@@ -58,8 +58,20 @@
 
             <ListViewItem Tag="DIAGNOSTIC">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="22" Height="22" Source="../Assets/Images/logo_small_grey.png" Opacity="0.8"/>
+                    <Image Width="22" Height="22" Source="pack://application:,,,/Assets/Images/logo_small_grey.png" Opacity="0.8"/>
                     <TextBlock Text="DIAGNÓSTICO" 
+                               Foreground="{StaticResource MainTextBrush}" 
+                               Style="{StaticResource AgencyBold}" 
+                               FontSize="14" 
+                               Margin="15 0 0 0"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </ListViewItem>
+            
+            <ListViewItem Tag="MERGER">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="22" Height="22" Source="pack://application:,,,/Assets/Images/cross.png" Opacity="0.8"/>
+                    <TextBlock Text="MERGER (PACKS)" 
                                Foreground="{StaticResource MainTextBrush}" 
                                Style="{StaticResource AgencyBold}" 
                                FontSize="14" 
@@ -70,7 +82,7 @@
 
             <ListViewItem Tag="MANIFEST">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="22" Height="22" Source="../Assets/Images/discord.png" Opacity="0.8"/>
+                    <Image Width="22" Height="22" Source="pack://application:,,,/Assets/Images/discord.png" Opacity="0.8"/>
                     <TextBlock Text="MANIFESTO" 
                                Foreground="{StaticResource MainTextBrush}" 
                                Style="{StaticResource AgencyBold}" 
@@ -82,7 +94,7 @@
 
             <ListViewItem Tag="RENAME">
                 <StackPanel Orientation="Horizontal">
-                    <Image Width="22" Height="22" Source="../Assets/Images/minus-outlined.png" Opacity="0.8"/>
+                    <Image Width="22" Height="22" Source="pack://application:,,,/Assets/Images/minus-outlined.png" Opacity="0.8"/>
                     <TextBlock Text="RENOMEAR" 
                                Foreground="{StaticResource MainTextBrush}" 
                                Style="{StaticResource AgencyBold}" 
